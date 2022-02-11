@@ -1,21 +1,37 @@
 import '../src/css/styles.css';
 import countryCardTpl from '../src/templates/country-card.hbs';
+import Countries from '../src/js/fetchCountries';
+import getRefs from '../src/js/get-refs';
+const debounce = require('lodash.debounce');
 
 const DEBOUNCE_DELAY = 300;
 
-fetch('https://restcountries.com/v3.1/all?fields=name,capital,population,flags,languages')
-  .then(responce => {
-    // console.log(responce.json());
-    return responce.json();
-  })
-  .then(countries => {
-    console.log(countries);
-    countries.map(country => {
-      const markup = countryCardTpl(country);
-      console.log(markup);
-    });
-  })
-  .catch(error => {
-    console.log(error);
-  });
-// console.log(result);
+const refs = getRefs();
+
+refs.searchForm.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
+
+function onSearch(event) {
+  let inputValue = event.target.value;
+
+  console.log(inputValue.trim());
+  if (!inputValue.trim()) {
+    clearCountryCard();
+    return;
+  }
+
+  Countries.fetchCountries(inputValue.trim()).then(renderCountryCard).catch(onFatchError);
+}
+
+function renderCountryCard(country) {
+  console.log(country);
+  const markup = countryCardTpl(country);
+  refs.countryContainer.insertAdjacentHTML('beforeend', markup);
+}
+
+function onFatchError(error) {
+  alert('error');
+}
+
+function clearCountryCard() {
+  refs.countryContainer.innerHTML = '';
+}
