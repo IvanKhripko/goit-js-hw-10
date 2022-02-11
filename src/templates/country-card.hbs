@@ -1,15 +1,10 @@
-<div>
-<ul>
-    <li>{{name.official}}</li>
-    <li>{{capital}}</li>
-    <li>{{population}}</li>
-    <li>{{flags.svg}}</li>
+{{#each this}}
+<div> 
+    <p>{{name.official}}</p>
+     <p>{{capital}}</p> 
+    <p>{{population}}</p>
+    <p>{{flags.svg}}</p>
 
-    {{#each languages}}
-    <li>{{this}}</li>
-    {{/each}}
-    
-</ul>
-
-
+    <p>{{#each languages}}{{#if @index}}, {{/if}}{{this}}{{/each}}</p>
 </div>
+{{/each}}
