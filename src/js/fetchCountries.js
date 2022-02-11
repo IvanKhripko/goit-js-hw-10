@@ -1,5 +1,9 @@
-// function fetchCountries() {}
+const BASE_URL = 'https://restcountries.com/v3.1';
 
-// const result = fetch('https://restcountries.com/v3.1/name/ukraine');
+function fetchCountries(nameCountry) {
+  return fetch(
+    `${BASE_URL}/name/${nameCountry}?fields=name,capital,population,flags,languages`,
+  ).then(responce => responce.json());
+}
 
-// console.log(result);
+export default { fetchCountries };
